@@ -10,7 +10,7 @@ var app = express.createServer();
 app.configure(function(){
 	app.use(express.staticProvider(__dirname + '/public'));
     });
-app.listen(80);
+
 
 
 /* Before we go any further we must realize that each time a user connects we're going to want to 
@@ -29,7 +29,7 @@ var websocket_server = io.listen(app);
 
 /* Now that we have a web socket server, we need to create a handler for connection events. These 
    events represet a client connecting to our server */
-socket.on('connection', function(socket) { 
+websocket_server.on('connection', function(socket) { 
 
 	/* Like the web server object, we must also define handlers for various socket events that 
 	   will happen during the lifetime of the connection. These will define how we interact with
@@ -45,10 +45,10 @@ socket.on('connection', function(socket) {
 		console.log( dscript );
 		dtp.strcompile(dscript);		
 		dtp.go();
-		dtp_by_session_id[client.sessionId] = dtp;
+		dtp_by_session_id[socket.sessionId] = dtp;
 
 		/* All that's left to do is send the aggration data from the dscript.  */
-		interval_id_by_session_id[client.sessionId] = setInterval(function () {
+		interval_id_by_session_id[socket.sessionId] = setInterval(function () {
 			var aggdata = {};
 			try { 
 			    dtp.aggwalk(function (id, key, val) {
@@ -59,7 +59,7 @@ socket.on('connection', function(socket) {
 					aggdata[key] = val;
 			    }
 				} );
-			    client.send( aggdata ); 
+			    socket.send( aggdata ); 
 			} catch( err ) {
 			    console.log(err);
 			}
@@ -71,10 +71,10 @@ socket.on('connection', function(socket) {
 	/* Not so fast. If a client disconnects we don't want their respective dtrace consumer to 
 	   keep collecting data any more. We also don't want to try to keep sending anything to them
 	   period. So clean up. */
-	client.on('disconnect', function(){ 
-		clearInterval(clearInterval(interval_id_by_session_id[client.sessionId]));
-		var dtp = dtp_by_session_id[client.sessionId];
-		delete dtp_by_session_id[client.sessionId]; 
+	socket.on('disconnect', function(){ 
+		clearInterval(clearInterval(interval_id_by_session_id[socket.sessionId]));
+		var dtp = dtp_by_session_id[socket.sessionId];
+		delete dtp_by_session_id[socket.sessionId]; 
 		dtp.stop();		
 		console.log('disconnected');
 	    });
@@ -83,5 +83,6 @@ socket.on('connection', function(socket) {
     } );
 
 
+app.listen(80);
 
 
