@@ -47,15 +47,15 @@ websocket_server.on('connection', function(socket) {
 		dtp.go();
 		dtp_by_session_id[socket.sessionId] = dtp;
 
-		/* All that's left to do is send the aggration data from the dscript.  */
-		interval_id_by_session_id[socket.sessionId] = setInterval(function () {
-			var aggdata = {};
-			try { 
-			    dtp.aggwalk(function (id, key, val) {
-				    for( index in val ) {
-					/* console.log( 'key: ' + key + ', interval: ' + 
-					   val[index][0][0] + '-' + val[index][0][1], ', count ' + val[index][1] ); 
-					*/
+		 /* All that's left to do is send the aggration data from the dscript.  */
+		 interval_id_by_session_id[socket.sessionId] = setInterval(function () {
+			 var aggdata = {};
+			 try { 
+			     dtp.aggwalk(function (id, key, val) {
+				     for( index in val ) {
+					 /* console.log( 'key: ' + key + ', interval: ' + 
+					    val[index][0][0] + '-' + val[index][0][1], ', count ' + val[index][1] ); */
+					 
 					aggdata[key] = val;
 			    }
 				} );

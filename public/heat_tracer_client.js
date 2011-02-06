@@ -11,7 +11,6 @@ function heat_tracer() {
     socket.on('connect', function(){ 
 	    console.log('on connection');
 	    var dscript = "syscall:::entry\n{\nself->syscall_entry_ts[probefunc] = vtimestamp;\n}\nsyscall:::return\n/self->syscall_entry_ts[probefunc]/\n{\n\n@time[probefunc] = lquantize((vtimestamp - self->syscall_entry_ts[probefunc] ) / 1000, 0, 63, 2);\nself->syscall_entry_ts[probefunc] = 0;\n}";
-	    //setTimeout( function() {  socket.send( { 'dscript' : dscript } ) }, 1000 );
 	    socket.send( { 'dscript' : dscript } );
 	});
 
@@ -38,24 +37,22 @@ function heat_tracer() {
 /* Take the aggregation data and update the heatmap */
 function draw(message) {  
 
-    /* Latest data goes in the right most column */
+    /* Latest data goes in the right most column, initialize it */
     var syscalls_by_latency = [];
     for ( var index = 0; index < 32; index++ ) {
 	syscalls_by_latency[index] = 0;
     }
     
-
     /* Presently we have the latency for each system call quantized in our message. Merge the data
        such that we have all the system call latency quantized together. This gives us the number
-       of syscalls made with latencies in each particular band */
-    for ( var key in message ) {
-	var val = message[key];
-
-	for ( var index in val ) {
-	    var latency_start = val[index][0][0];
-	    var count =  val[index][1];
-
-	    //TODO fix
+       of syscalls made with latencies in each particular band. */
+    for ( var syscall in message ) {
+	var val = message[syscall];
+	for ( result_index in val ) {
+	    var latency_start = val[result_index][0][0];
+	    var count =  val[result_index][1];
+	    /* The d script we're using lquantizes from 0 to 63 in steps of two. So dividing by 2 
+	       tells us which row this result belongs in */
 	    syscalls_by_latency[Math.floor(latency_start/2)] += count;					  
 	}
     }
