@@ -1,0 +1,10 @@
+First thing's first, you're going to need a system with DTrace. This likely means Solaris (or one of its decedents), OS X, or a BSD variant.  There doesn't appear to be Dtrace available for Linux :(
+
+Still with us? Good. 
+
+For this tutorial you'll also need: 
+
+    node - http://nodejs.org/#download
+    npm - https://github.com/isaacs/npm
+    node-libdtrace - https://github.com/bcantrill/node-libdtrace
+    Socket.IO – “npm install socket.io”
