@@ -1,5 +1,7 @@
 First thing's first, you're going to need a system with DTrace. This likely means Solaris (or one of its decedents), OS X, or a BSD variant.  There doesn't appear to be Dtrace available for Linux :(
 
+Secondly, you'll exposing a significant security volunterability if you change the binding port away from localhost. Please only do so if you're confident of your network. 
+
 Still with us? Good. 
 
 For this tutorial you'll also need: 
@@ -8,3 +10,15 @@ For this tutorial you'll also need:
     npm - https://github.com/isaacs/npm
     node-libdtrace - https://github.com/bcantrill/node-libdtrace
     Socket.IO – “npm install socket.io”
+
+
+Once these are installed simply run heat tracer as root (dtrace requires root for it's kernelspace trapping goodness):
+    
+    sudo node heat_tracer.js 
+
+
+That's it, browse to http://localhost/heat_tracer.html and enjoy looking at your syscall latency.
+
+
+
+
