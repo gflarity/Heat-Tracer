@@ -20,5 +20,7 @@ Once these are installed simply run heat tracer as root (dtrace requires root fo
 That's it, browse to http://localhost/heat_tracer.html and enjoy looking at your syscall latency.
 
 
+This code is released under the MIT license. See LICENSE file for details..
+
 
 
