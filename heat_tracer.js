@@ -3,14 +3,12 @@ var libdtrace = require('libdtrace');
 var io = require('socket.io');
 var express = require('express');
 
-
 /* create our express server and prepare to serve javascript files in ./public 
 */
 var app = express.createServer();
 app.configure(function(){
 	app.use(express.staticProvider(__dirname + '/public'));
     });
-
 
 
 /* Before we go any further we must realize that each time a user connects we're going to want to 
@@ -25,7 +23,6 @@ var dtp_by_session_id = {};
    integrates with express.  
 */
 var websocket_server = io.listen(app); 
-
 
 /* Now that we have a web socket server, we need to create a handler for connection events. These 
    events represet a client connecting to our server */
