@@ -5,7 +5,7 @@ function heat_tracer() {
     //Global vars
     setup();
 
-    var socket = new io.Socket('localhost'); //connect to localhost presently
+    var socket = new io.Socket(); //connect to localhost presently
     socket.connect();
 
     socket.on('connect', function(){ 
