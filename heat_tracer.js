@@ -7,7 +7,7 @@ var express = require('express');
 */
 var app = express.createServer();
 app.configure(function(){
-	app.use(express.staticProvider(__dirname + '/public'));
+	app.use(express.static(__dirname + '/public'));
     });
 
 
@@ -80,6 +80,6 @@ websocket_server.on('connection', function(socket) {
     } );
 
 
-app.listen(80);
+app.listen(8000);
 
 
