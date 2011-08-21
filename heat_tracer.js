@@ -1,6 +1,5 @@
 var http = require('http');
 var libdtrace = require('libdtrace');
-var io = require('socket.io');
 var express = require('express');
 
 /* create our express server and prepare to serve javascript files in ./public 
@@ -9,6 +8,8 @@ var app = express.createServer();
 app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
     });
+
+var io = require('socket.io').listen(app);
 
 
 /* Before we go any further we must realize that each time a user connects we're going to want to 
@@ -22,11 +23,10 @@ var dtp_by_session_id = {};
 /* In order to effecienctly send packets we're going to use the Socket.IO library which seemlessly 
    integrates with express.  
 */
-var websocket_server = io.listen(app); 
 
 /* Now that we have a web socket server, we need to create a handler for connection events. These 
    events represet a client connecting to our server */
-websocket_server.on('connection', function(socket) { 
+io.sockets.on('connection', function(socket) { 
 
 	/* Like the web server object, we must also define handlers for various socket events that 
 	   will happen during the lifetime of the connection. These will define how we interact with
@@ -44,6 +44,7 @@ websocket_server.on('connection', function(socket) {
 		dtp.go();
 		dtp_by_session_id[socket.sessionId] = dtp;
 
+    
 		 /* All that's left to do is send the aggration data from the dscript.  */
 		 interval_id_by_session_id[socket.sessionId] = setInterval(function () {
 			 var aggdata = {};
@@ -56,7 +57,7 @@ websocket_server.on('connection', function(socket) {
 					aggdata[key] = val;
 			    }
 				} );
-			    socket.send( aggdata ); 
+			    socket.emit( 'message', aggdata ); 
 			} catch( err ) {
 			    console.log(err);
 			}
