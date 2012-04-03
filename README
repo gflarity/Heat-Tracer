@@ -10,6 +10,7 @@ For this tutorial you'll also need:
     npm - https://github.com/isaacs/npm
     node-libdtrace - https://github.com/bcantrill/node-libdtrace
     Socket.IO – “npm install socket.io”
+    express - npm install express
 
 
 Once these are installed simply run heat tracer as root (dtrace requires root for it's kernelspace trapping goodness):
