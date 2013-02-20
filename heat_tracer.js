@@ -13,6 +13,9 @@ app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
     });
 
+/* to decreate verbosity of socket.io 
+*/
+io.set('log level', 1);
 
 /* Before we go any further we must realize that each time a user connects we're going to want to 
    them send them dtrace aggregation every second. We can do so using 'setInterval', but we must
