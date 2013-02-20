@@ -2,14 +2,16 @@ var http = require('http');
 var libdtrace = require('libdtrace');
 var express = require('express');
 
-/* create our express server and prepare to serve javascript files in ./public 
+/* create our express & http server and prepare to serve javascript files in ./public 
 */
-var app = express.createServer();
+var app = express()
+  , http = require('http')
+  , server = http.createServer(app)
+  , io = require('socket.io').listen(server);
+
 app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
     });
-
-var io = require('socket.io').listen(app);
 
 
 /* Before we go any further we must realize that each time a user connects we're going to want to 
@@ -81,6 +83,6 @@ io.sockets.on('connection', function(socket) {
     } );
 
 
-app.listen(8000);
+server.listen(8000);
 
 
