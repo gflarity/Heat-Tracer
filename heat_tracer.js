@@ -4,10 +4,9 @@ var express = require('express');
 
 /* create our express & http server and prepare to serve javascript files in ./public 
 */
-var app = express()
-  , http = require('http')
-  , server = http.createServer(app)
-  , io = require('socket.io').listen(server);
+var app = express();
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
 
 app.configure(function(){
 	app.use(express.static(__dirname + '/public'));
